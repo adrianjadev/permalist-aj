@@ -40,12 +40,14 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/add", async (req, res) => {
-  const item = req.body.newItem;
-
-  await db.query("INSERT INTO items (title) VALUES ($1);", [item]);
-  
-  items.push({ title: item });
-  res.redirect("/");
+  try {
+    const item = req.body.newItem;
+    await db.query("INSERT INTO items (title) VALUES ($1);", [item]);
+    items.push({ title: item });
+    res.redirect('/');
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.post("/edit", async (req, res) => {
